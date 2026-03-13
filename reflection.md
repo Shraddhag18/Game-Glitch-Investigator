@@ -4,9 +4,15 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 
 ## 1. What was broken when you started?
 
-- What did the game look like the first time you ran it?
-- List at least two concrete bugs you noticed at the start  
-  (for example: "the hints were backwards").
+When I first ran the game, it looked like a normal number guessing game — a text input, a Submit button, and a difficulty selector. But as soon as I started playing, things felt off. Even when I typed the exact secret number shown in the Developer Debug Info panel, the game would not let me win on certain attempts. The hints were also pointing me in the wrong direction, making the game more confusing with every guess.
+
+Here are the concrete bugs I noticed:
+
+- **Hints were backwards:** When my guess was too high, the hint said "📈 Go HIGHER!" and when it was too low it said "📉 Go LOWER!" — the exact opposite of what I needed. This made it impossible to converge on the right answer by following the hints.
+
+- **Can't win on even-numbered attempts:** On every second attempt (attempt 2, 4, 6...), the game secretly converted the number to a string before comparing. This caused the wrong result — for example, comparing `int(50)` to `"50"` would fail, and string comparisons like `"9" > "50"` are evaluated alphabetically, not numerically. So even guessing the correct number on an even attempt would not register as a win.
+
+- **Attempts counter starts at 1 instead of 0:** The `attempts` variable was initialized to `1`, so on the very first guess it jumped to `2`. This meant the "Attempts left" display was always one short, and the score penalty kicked in earlier than expected.
 
 ---
 
