@@ -38,13 +38,16 @@ I decided a bug was truly fixed only when two conditions were both met: the `pyt
 
 ## 4. What did you learn about Streamlit and state?
 
-- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+Streamlit works differently from a normal Python script — every time the user interacts with the app (clicks a button, types in a box), the entire script runs from top to bottom again. I'd explain it to a friend like this: imagine every button click refreshes the whole page from scratch, like reloading a website. That means any variable you create normally just resets to its original value on every click.
+
+To keep data alive across these reruns, Streamlit provides `st.session_state` — a dictionary that persists between reruns. Think of it like a sticky note that survives the page refresh. That's why the secret number and attempt counter are stored in `st.session_state` rather than as plain variables. The bug in this project was that `attempts` was initialised to `1` inside an `if "attempts" not in st.session_state` block — this ran correctly on the first load, but once it was set, it stayed at whatever value it had, even if that starting value was wrong.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-- What is one habit or strategy from this project that you want to reuse in future labs or projects?
-  - This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
-- In one or two sentences, describe how this project changed the way you think about AI generated code.
+**Habit to reuse:** Writing targeted pytest tests immediately after fixing a bug — not just to check the fix works, but to lock in the correct behaviour so it can't silently break again later. In this project, adding `test_hint_message_too_high` and `test_hint_message_too_low` meant the hint logic was now protected by an automated check, not just a mental note.
+
+**What I'd do differently:** Next time I work with AI on a coding task, I would describe the bug I'm seeing before asking for a fix — giving the AI the symptom, not just the code. In this project, Claude sometimes jumped to fixing things I hadn't fully confirmed were wrong (like the Hard difficulty range). If I had described what I observed in the running app first, the AI's suggestions would have been more targeted and I would have had an easier time verifying them.
+
+**How this changed my thinking:** This project showed me that AI-generated code can have subtle, compounding bugs that look plausible at first glance — like a scoring function that rewards wrong guesses on even turns. I'll never assume AI-generated code is correct just because it runs without errors; I'll always play through the logic manually and back it up with tests.
