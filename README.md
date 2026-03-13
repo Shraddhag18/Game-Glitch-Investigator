@@ -56,11 +56,11 @@ This is a number guessing game built with Streamlit. The player selects a diffic
 
 ## 📸 Demo
 
-<!-- Screenshot 1: Take a screenshot of the running Streamlit app after winning a game (balloons visible + "You won!" message) -->
-- [ ] [Insert a screenshot of your fixed, winning game here]
+### Winning Game
+![Winning Game](winning_page.png)
 
-<!-- Screenshot 2: Take a screenshot of your terminal showing all 5 pytest tests passing -->
-- [ ] [Insert a screenshot of pytest results showing 5 passed here]
+### pytest Results (5 passed)
+![pytest Results](pytest_results.png)
 
 ## 🚀 Stretch Features
 
