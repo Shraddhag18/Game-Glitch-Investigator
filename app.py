@@ -30,6 +30,8 @@ st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
+# FIX: Original code initialized attempts to 1, causing an off-by-one error on the first guess.
+# AI (Claude Code) caught this during code review. Changed to 0 so the first submit correctly counts as attempt 1.
 if "attempts" not in st.session_state:
     st.session_state.attempts = 0
 

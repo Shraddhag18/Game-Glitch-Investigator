@@ -18,18 +18,21 @@ Here are the concrete bugs I noticed:
 
 ## 2. How did you use AI as a teammate?
 
-- Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
-- Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
-- Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
+I used **Claude Code** (an AI assistant inside VS Code) as my primary AI tool throughout this project. I gave it the full codebase as context and asked it to identify all bugs, explain the logic behind each one, and help me fix them step by step.
+
+**Correct suggestion:** Claude correctly identified that the hints were backwards — when `guess > secret`, the original code returned "Go HIGHER!" instead of "Go LOWER!". I verified this by playing the game myself with the Developer Debug Info panel open, confirming that following the hints led me further from the answer. I then ran `pytest` and the new `test_hint_message_too_high` test confirmed the fix.
+
+**Incorrect or misleading suggestion:** Claude initially labelled the "Hard" difficulty range (`1–50`) as a bug that needed to be changed to `1–500`. While the range was arguably wrong in spirit (Hard should be harder), the original starter code may have intended a smaller range for a different reason. I accepted the change since it made logical sense, but I should have verified with the assignment spec first rather than just trusting the AI's interpretation.**Refactoring with AI:** Claude also used Agent mode to move all four logic functions out of `app.py` and into `logic_utils.py` in one step. I reviewed the diff carefully before accepting it to make sure nothing was accidentally removed or broken.
 
 ---
 
 ## 3. Debugging and testing your fixes
 
-- How did you decide whether a bug was really fixed?
-- Describe at least one test you ran (manual or using pytest)  
-  and what it showed you about your code.
-- Did AI help you design or understand any tests? How?
+I decided a bug was truly fixed only when two conditions were both met: the `pytest` tests passed, and I could manually reproduce the expected behaviour in the running Streamlit app. Passing tests alone were not enough because the tests only cover logic — the UI wiring could still be broken.
+
+**Test I ran:** I ran `pytest tests/test_game_logic.py -v` after fixing the hints. Before the fix, `test_hint_message_too_high` failed with `AssertionError: assert "HIGHER" not in "📈 Go HIGHER!"`. After swapping the messages in `check_guess`, all 5 tests passed. This confirmed the fix was applied in the right place (`logic_utils.py`) and that `app.py` was correctly importing from it.
+
+**AI help with tests:** Yes — Claude pointed out that the original test file had a bug too. All three starter tests were comparing `check_guess(...)` directly to a string like `"Win"`, but `check_guess` returns a tuple `(outcome, message)`. Claude suggested unpacking the result with `outcome, message = check_guess(...)` and asserting on `outcome` only. I verified this made sense by reading the function signature myself before accepting the change.
 
 ---
 
