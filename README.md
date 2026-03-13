@@ -25,13 +25,42 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+### 🎯 Game Purpose
+This is a number guessing game built with Streamlit. The player selects a difficulty level (Easy: 1–20, Normal: 1–100, Hard: 1–500), then guesses the secret number within a limited number of attempts. Each guess receives a "Too High" or "Too Low" hint to guide the player. The score decreases with each wrong guess and rewards winning sooner.
+
+### 🐛 Bugs Found
+
+| # | Bug | Effect |
+|---|-----|--------|
+| 1 | Hints were backwards | "Go HIGHER" shown when guess was too high — impossible to converge |
+| 2 | Secret cast to string on even attempts | Correct guesses on attempt 2, 4, 6... never registered as a win |
+| 3 | Attempts counter started at 1 instead of 0 | "Attempts left" was always one short; score penalised from first guess |
+| 4 | Score rewarded wrong guesses on even attempts | Player gained +5 points for a "Too High" guess on even turns |
+| 5 | Hard difficulty easier than Normal (range 1–50 vs 1–100) | Selecting "Hard" was actually easier than "Normal" |
+| 6 | New Game ignored difficulty setting | Always generated secret between 1–100 regardless of selected difficulty |
+| 7 | Info text hardcoded "1 and 100" | Showed wrong range for Easy and Hard difficulties |
+| 8 | `logic_utils.py` was all stubs | All functions raised `NotImplementedError`; tests could never pass |
+| 9 | Test assertions compared tuple to string | `check_guess` returns `(outcome, message)` but tests checked `result == "Win"` |
+
+### 🔧 Fixes Applied
+
+- **Hints fixed** — swapped messages in `check_guess`: "Too High" → "Go LOWER", "Too Low" → "Go HIGHER"
+- **String cast removed** — deleted the `if attempts % 2 == 0: secret = str(secret)` block; secret is always an int
+- **Attempts initialised to 0** — changed `st.session_state.attempts = 1` to `= 0`
+- **Scoring fixed** — both "Too High" and "Too Low" now always subtract 5 points
+- **Hard difficulty fixed** — range changed to 1–500 to be genuinely harder
+- **New Game fixed** — uses `random.randint(low, high)` based on selected difficulty
+- **Info text fixed** — now shows `{low} and {high}` dynamically
+- **Refactored into `logic_utils.py`** — all four logic functions moved out of `app.py`
+- **Test assertions fixed** — unpacked tuple with `outcome, message = check_guess(...)` and asserted on `outcome`
 
 ## 📸 Demo
 
+<!-- Screenshot 1: Take a screenshot of the running Streamlit app after winning a game (balloons visible + "You won!" message) -->
 - [ ] [Insert a screenshot of your fixed, winning game here]
+
+<!-- Screenshot 2: Take a screenshot of your terminal showing all 5 pytest tests passing -->
+- [ ] [Insert a screenshot of pytest results showing 5 passed here]
 
 ## 🚀 Stretch Features
 
