@@ -27,6 +27,32 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
+# FEATURE: Guess History sidebar — visualizes how close each past guess was (Challenge 2)
+st.sidebar.divider()
+st.sidebar.subheader("📜 Guess History")
+if "history" in st.session_state and st.session_state.history:
+    game_range = high - low
+    for i, g in enumerate(st.session_state.history):
+        if isinstance(g, int):
+            distance = abs(g - st.session_state.secret)
+            closeness = max(0, 1 - distance / game_range)
+            if closeness >= 0.9:
+                temp = "🔥 Burning hot"
+            elif closeness >= 0.7:
+                temp = "♨️ Very warm"
+            elif closeness >= 0.5:
+                temp = "🌡️ Warm"
+            elif closeness >= 0.3:
+                temp = "❄️ Cold"
+            else:
+                temp = "🧊 Ice cold"
+            st.sidebar.write(f"**#{i+1}** → `{g}` — {temp}")
+            st.sidebar.progress(closeness)
+        else:
+            st.sidebar.write(f"**#{i+1}** → ❌ invalid input")
+else:
+    st.sidebar.caption("No guesses yet.")
+
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
@@ -74,6 +100,9 @@ with col3:
 if new_game:
     st.session_state.attempts = 0
     st.session_state.secret = random.randint(low, high)
+    st.session_state.score = 0
+    st.session_state.status = "playing"
+    st.session_state.history = []
     st.success("New game started.")
     st.rerun()
 
