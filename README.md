@@ -64,4 +64,7 @@ This is a number guessing game built with Streamlit. The player selects a diffic
 
 ## 🚀 Stretch Features
 
-- [ ] [If you choose to complete Challenge 4, insert a screenshot of your Enhanced Game UI here]
+### Challenge 2: Guess History Sidebar
+Added a **Guess History** panel in the sidebar that shows each past guess with a hot/cold temperature indicator (🔥 Burning hot → 🧊 Ice cold) and a progress bar showing how close the guess was to the secret number.
+
+![Enhanced UI](enhanced_ui.png)
